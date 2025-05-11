@@ -3,10 +3,9 @@
 :root {
   --primaryColor: #42427d;
   --lightPrimaryColor: #5840bb;
-  --secondaryColor:#7979B2;
+  --secondaryColor: #7979b2;
   --light-bg: #e5eff7;
 }
-
 
 html {
   font-size: 10px;
@@ -70,8 +69,7 @@ body {
   border-radius: 20px;
 }
 
-
-.main-container{
+.main-container {
   width: 100%;
   /* height: 97vh; */
   padding: 2.5rem;
@@ -79,24 +77,23 @@ body {
   box-sizing: border-box;
 }
 
-.primary-txt{
+.primary-txt {
   font-size: 2.5rem;
   color: var(--lightPrimaryColor);
 }
 
-.secondary-txt{
+.secondary-txt {
   font-size: 2rem;
   color: var(--secondaryColor);
 }
 
-.nav-link-btn{
+.nav-link-btn {
   text-decoration: none;
   display: flex;
   align-items: center;
 }
 
-
-.primary-btn{
+.primary-btn {
   min-width: 100px;
   background-color: var(--lightPrimaryColor);
   color: white;
@@ -108,7 +105,7 @@ body {
   cursor: pointer;
 }
 
-.two-div-flex{
+.two-div-flex {
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -116,8 +113,71 @@ body {
   padding-right: 3rem;
 }
 
-.wallet-addr-txt{
+.wallet-addr-txt {
   font-size: 1.5rem;
   color: var(--lightPrimaryColor);
+}
 
+.app-container {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  background-color: #f8f9fa;
+}
+
+.connect-wallet-container {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
+.connect-wallet-content {
+  text-align: center;
+  padding: 2rem;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.connect-wallet-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  color: #2c3e50;
+  background: white;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.connect-wallet-button:hover {
+  background: #f8f9fa;
+  border-color: #4dabf7;
+  transform: translateY(-2px);
+}
+
+.metamask-icon {
+  width: 32px;
+  height: 32px;
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    padding: 1rem;
+  }
+
+  .connect-wallet-button {
+    flex-direction: column;
+    padding: 1rem;
+  }
 }

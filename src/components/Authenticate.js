@@ -1,6 +1,5 @@
 import React, { useState, useRef } from "react";
 import jsQR from "jsqr";
-import axios from "axios";
 import { ethers } from "ethers";
 import "../css/Authenticate.css";
 
@@ -10,6 +9,7 @@ const Authenticate = ({ account, contract }) => {
   const [error, setError] = useState("");
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
+  const [scanResult, setScanResult] = useState(null);
   const canvasRef = useRef(null);
 
   const handleFileSelect = async (event) => {
@@ -20,38 +20,32 @@ const Authenticate = ({ account, contract }) => {
       setPreviewUrl(url);
       setError("");
       setMessage("");
+      setScanResult(null);
 
-      // Create an image element
       const img = new Image();
       img.src = url;
 
       img.onload = () => {
-        // Create canvas and get context
         const canvas = canvasRef.current;
         const context = canvas.getContext("2d");
 
-        // Set canvas dimensions to match image
         canvas.width = img.width;
         canvas.height = img.height;
-
-        // Draw image on canvas
         context.drawImage(img, 0, 0, img.width, img.height);
 
-        // Get image data
         const imageData = context.getImageData(
           0,
           0,
           canvas.width,
           canvas.height
         );
-
-        // Scan for QR code
         const code = jsQR(imageData.data, imageData.width, imageData.height);
 
         if (code) {
           console.log("QR Code detected:", code.data);
           try {
             const data = JSON.parse(code.data);
+            setScanResult(data);
             if (data.hash) {
               verifyTransaction(data.hash);
             } else {
@@ -76,20 +70,14 @@ const Authenticate = ({ account, contract }) => {
 
   const verifyTransaction = async (hash) => {
     try {
-      // Get the provider from the contract
       const provider = contract.provider;
-
-      // Get transaction receipt
       const receipt = await provider.getTransactionReceipt(hash);
 
       if (receipt) {
-        // Check if transaction was successful
         if (receipt.status === 1) {
-          // Get transaction details
           const tx = await provider.getTransaction(hash);
 
           if (tx) {
-            // Verify the transaction was sent to our contract
             if (tx.to.toLowerCase() === contract.address.toLowerCase()) {
               setMessage("Product is Authenticated ✅");
               setAuth(true);
@@ -112,89 +100,85 @@ const Authenticate = ({ account, contract }) => {
   };
 
   return (
-    <div className="cam">
-      <h4 style={{ color: "#000", position: "fixed", right: 8, top: 2 }}>
-        Wallet Address:{" "}
-        {account.substring(0, 4) +
-          "..." +
-          account.substring(account.length - 4, account.length)}
-      </h4>
-      <br />
-      <h2 style={{ position: "absolute", top: 20 }}>
-        Upload QR Code Image to Scan
-      </h2>
+    <div className="authenticate-container">
+      <div className="header">
+        <h2>Product Authentication</h2>
+        <div className="wallet-info">
+          <span>Wallet: </span>
+          {account.substring(0, 4) +
+            "..." +
+            account.substring(account.length - 4)}
+        </div>
+      </div>
 
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "500px",
-          margin: "100px auto",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-          gap: "20px",
-        }}
-      >
-        <input
-          type="file"
-          accept="image/*"
-          onChange={handleFileSelect}
-          style={{
-            padding: "10px",
-            border: "2px dashed #ccc",
-            borderRadius: "5px",
-            width: "100%",
-            textAlign: "center",
-          }}
-        />
+      <div className="upload-section">
+        <div className="upload-box">
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileSelect}
+            id="file-input"
+            className="file-input"
+          />
+          <label htmlFor="file-input" className="file-label">
+            <div className="upload-icon">📁</div>
+            <span>Upload QR Code Image</span>
+          </label>
+        </div>
 
         {previewUrl && (
-          <div style={{ width: "100%", maxWidth: "300px" }}>
-            <img
-              src={previewUrl}
-              alt="QR Code Preview"
-              style={{ width: "100%", height: "auto" }}
-            />
-            <canvas ref={canvasRef} style={{ display: "none" }} />
+          <div className="preview-section">
+            <div className="preview-container">
+              <img
+                src={previewUrl}
+                alt="QR Code Preview"
+                className="preview-image"
+              />
+              <canvas ref={canvasRef} style={{ display: "none" }} />
+            </div>
           </div>
         )}
       </div>
 
-      <div
-        style={{
-          position: "absolute",
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          top: "50%",
-        }}
-      >
-        <div>
-          <h1>{message}</h1>
-          {error && (
-            <p
-              style={{
-                color: "red",
-                backgroundColor: "#ffebee",
-                padding: "10px",
-                borderRadius: "5px",
-                margin: "10px 0",
-              }}
-            >
-              {error}
-            </p>
-          )}
-        </div>
+      <div className="results-section">
+        {message && (
+          <div className={`status-message ${auth ? "success" : "error"}`}>
+            <h3>{message}</h3>
+          </div>
+        )}
+
+        {error && (
+          <div className="error-message">
+            <p>{error}</p>
+          </div>
+        )}
+
+        {scanResult && (
+          <div className="scan-details">
+            <h3>QR Code Details</h3>
+            <div className="details-grid">
+              {Object.entries(scanResult).map(([key, value]) => (
+                <div key={key} className="detail-item">
+                  <span className="detail-label">{key}:</span>
+                  <span className="detail-value">{value}</span>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
-      <div style={{ position: "absolute", bottom: 90 }}>
-        <h3>
-          Please wait for 15 sec if Authentication message is not appearing on
-          the screen then your product is not Authenticated.
-        </h3>
-        <br />
-        <span>Please reload the page to Scan again.</span>
+      <div className="footer-note">
+        <p>
+          Please wait for 15 seconds if Authentication message is not appearing.
+          If no message appears, your product is not Authenticated.
+        </p>
+        <button
+          onClick={() => window.location.reload()}
+          className="reload-button"
+        >
+          Scan Again
+        </button>
       </div>
     </div>
   );

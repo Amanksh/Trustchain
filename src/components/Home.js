@@ -14,7 +14,7 @@ const Home = ({ account }) => {
         </h4>
         <br />
         <div id="login-type">
-          <h1 id="greetings">Welcome to Asset Tracker!</h1>
+          <h1 id="greetings">Welcome to TrustChain!</h1>
           <h1 id="subtitle-txt">
             A Blockchain Based Fake Product Detection 🕵️‍♀️
           </h1>

@@ -18,6 +18,7 @@ import SideBar from "./components/SideBar";
 
 import Authenticate from "./components/Authenticate";
 import GetStarted from "./components/getStarted";
+import Navbar from "./components/Navbar";
 
 const CONTRACT_ADDRESS = process.env.REACT_APP_CONTRACT_ADD;
 
@@ -98,92 +99,98 @@ const App = () => {
   }, []);
 
   return (
-    <>
+    <div className="app-container">
       {contract ? (
         <BrowserRouter>
-          <Routes>
-            <Route path="/" element={<Home account={currentAccount} />}></Route>
-            {/* <Route
-              path="/vendor"
-              element={<SideBar contract={contract} account={currentAccount} />}
-            ></Route> */}
-            <Route
-              path="/vendor"
-              element={
-                <GetStarted contract={contract} account={currentAccount} />
-              }
-            >
+          <Navbar account={currentAccount} />
+          <div className="main-content">
+            <Routes>
+              <Route path="/" element={<Home account={currentAccount} />} />
+              {/* <Route
+                path="/vendor"
+                element={<SideBar contract={contract} account={currentAccount} />}
+              ></Route> */}
               <Route
-                path="products"
+                path="/vendor"
+                element={
+                  <GetStarted contract={contract} account={currentAccount} />
+                }
+              >
+                <Route
+                  path="products"
+                  element={
+                    <Products contract={contract} account={currentAccount} />
+                  }
+                ></Route>
+                <Route
+                  path="addproduct"
+                  element={
+                    <VendorForm contract={contract} account={currentAccount} />
+                  }
+                />
+                <Route
+                  path="available-distributors"
+                  element={
+                    <Distributors
+                      contract={contract}
+                      account={currentAccount}
+                    />
+                  }
+                />
+              </Route>
+              <Route
+                path="/distributorform"
+                element={
+                  <DistributorForm
+                    contract={contract}
+                    account={currentAccount}
+                  />
+                }
+              ></Route>
+              {/* <Route
+                path="/vendor/products"
                 element={
                   <Products contract={contract} account={currentAccount} />
                 }
               ></Route>
               <Route
-                path="addproduct"
+                path="/vendor/addproduct"
                 element={
                   <VendorForm contract={contract} account={currentAccount} />
                 }
               />
               <Route
-                path="available-distributors"
+                path="/vendor/available-distributors"
                 element={
                   <Distributors contract={contract} account={currentAccount} />
                 }
+              /> */}
+              <Route
+                path="/authenticate"
+                element={
+                  <Authenticate contract={contract} account={currentAccount} />
+                }
               />
-            </Route>
-            <Route
-              path="/distributorform"
-              element={
-                <DistributorForm contract={contract} account={currentAccount} />
-              }
-            ></Route>
-            {/* <Route
-              path="/vendor/products"
-              element={
-                <Products contract={contract} account={currentAccount} />
-              }
-            ></Route>
-            <Route
-              path="/vendor/addproduct"
-              element={
-                <VendorForm contract={contract} account={currentAccount} />
-              }
-            />
-            <Route
-              path="/vendor/available-distributors"
-              element={
-                <Distributors contract={contract} account={currentAccount} />
-              }
-            /> */}
-            <Route
-              path="/authenticate"
-              element={
-                <Authenticate contract={contract} account={currentAccount} />
-              }
-            />
-          </Routes>
+            </Routes>
+          </div>
         </BrowserRouter>
       ) : (
-        <div>
-          <div>
-            <div className="connectWalletContainer">
-              {wallet == "Please Connect Your Wallet to Proceed" && (
-                <button onClick={connectWallet} className="connectWalletBtn">
-                  <img
-                    src={
-                      "https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png"
-                    }
-                    className="img"
-                  />{" "}
-                  {wallet}
-                </button>
-              )}
-            </div>
+        <div className="connect-wallet-container">
+          <div className="connect-wallet-content">
+            {wallet === "Please Connect Your Wallet to Proceed" && (
+              <button onClick={connectWallet} className="connect-wallet-button">
+                <img
+                  src="https://cdn.iconscout.com/icon/free/png-256/metamask-2728406-2261817.png"
+                  alt="MetaMask"
+                  className="metamask-icon"
+                />
+                {wallet}
+              </button>
+            )}
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 
