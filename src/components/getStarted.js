@@ -25,30 +25,51 @@ const Greetings = () => {
 };
 
 const GetStarted = ({ contract, account }) => {
-  console.log("get started", account);
+  console.log("Contract:", contract);
+  console.log("Account:", account);
+  console.log("Expected Wallet:", process.env.REACT_APP_WALLET_ADD);
+
   const [show, setShow] = useState(false);
   const { pathname } = useLocation();
 
-  console.log(account);
-
   const checkAccount = () => {
-    setShow(account === process.env.REACT_APP_WALLET_ADD);
+    if (!account) {
+      console.log("No account connected");
+      setShow(false);
+      return;
+    }
+
+    if (!process.env.REACT_APP_WALLET_ADD) {
+      console.log("No manufacturer wallet address configured in .env");
+      setShow(false);
+      return;
+    }
+
+    const isManufacturer =
+      account.toLowerCase() === process.env.REACT_APP_WALLET_ADD.toLowerCase();
+    console.log("Is manufacturer:", isManufacturer);
+    setShow(isManufacturer);
   };
 
   useEffect(() => {
     checkAccount();
-  }, []);
+  }, [account]); // Add account as dependency to recheck when it changes
 
   if (!show) {
     return (
       <div>
         <div style={{ textAlign: "center", marginTop: 40 }}>
-          <h2 className="primary-txt">OOPs 🙊 your company is not registerd</h2>
+          <h2 className="primary-txt">
+            OOPs 🙊 your company is not registered
+          </h2>
           <p className="primary-txt">
-            Please do register your company to avail our services
+            Please make sure you are connected with the correct wallet address
+          </p>
+          <p className="primary-txt">
+            Connected wallet: {account || "Not connected"}
           </p>
           <br />
-          <a href="/google.com">Proceed to the Home Page</a>
+          <a href="/">Return to Home Page</a>
         </div>
       </div>
     );

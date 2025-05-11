@@ -249,7 +249,18 @@ const ReactTable = React.memo((props) => {
             <button
               type="submit"
               onClick={async (e) => {
-                console.log("id", props.distributorId);
+                console.log("Submit Data:", {
+                  item: data[0].item,
+                  description: data[0].description,
+                  cost: data[0].cost,
+                  quantity: data[0].quantity,
+                  vendorName: props.vendorName,
+                  consumerName: props.consumerName,
+                  vendorAdd: props.vendorAdd,
+                  consumerAdd: props.consumerAdd,
+                  distributorId: props.distributorId,
+                });
+
                 if (
                   !data[0].item ||
                   !data[0].description ||
@@ -259,9 +270,20 @@ const ReactTable = React.memo((props) => {
                   !props.consumerName ||
                   !props.vendorAdd ||
                   !props.consumerAdd ||
-                  !props.distributorId
+                  props.distributorId === ""
                 ) {
-                  setAssetMessage("Plese fill all the fields");
+                  console.log("Missing fields:", {
+                    item: !data[0].item,
+                    description: !data[0].description,
+                    cost: !data[0].cost,
+                    quantity: !data[0].quantity,
+                    vendorName: !props.vendorName,
+                    consumerName: !props.consumerName,
+                    vendorAdd: !props.vendorAdd,
+                    consumerAdd: !props.consumerAdd,
+                    distributorId: props.distributorId === "",
+                  });
+                  setAssetMessage("Please fill all the fields");
                 } else {
                   setAssetMessage("Creating...");
                   e.preventDefault();
@@ -394,7 +416,7 @@ const PaymentQRCode = styled(QRCode)`
 `;
 
 const ReactForm = (props) => {
-  console.log("ReactForm", props);
+  console.log("ReactForm props:", props);
   const navigate = useNavigate();
   const { amountDue, setAmountDue, distributors } = props;
   const defaultValues = React.useMemo(
@@ -406,6 +428,18 @@ const ReactForm = (props) => {
     }),
     []
   );
+
+  const [vendorName, setVendorName] = React.useState("");
+  const [vendorAdd, setVendorAdd] = React.useState("");
+  const [consumerAdd, setConsumerAdd] = React.useState("");
+  const [consumerName, setConsumerName] = React.useState("");
+  const [distributorId, setDistributorId] = React.useState("");
+
+  // Add this useEffect to log distributor changes
+  useEffect(() => {
+    console.log("Current distributorId:", distributorId);
+  }, [distributorId]);
+
   const onSubmit = async (values, instance) => {
     console.log("Form values:", values);
     instance.reset();
@@ -413,11 +447,6 @@ const ReactForm = (props) => {
   const form = useForm({ defaultValues, onSubmit });
   const { Form, values, meta } = form;
 
-  const [vendorName, setVendorName] = React.useState("");
-  const [vendorAdd, setVendorAdd] = React.useState("");
-  const [consumerAdd, setConsumerAdd] = React.useState("");
-  const [consumerName, setConsumerName] = React.useState("");
-  const [distributorId, setDistributorId] = React.useState(0);
   return (
     <>
       {/* <FontAwesomeIcon
@@ -482,14 +511,18 @@ const ReactForm = (props) => {
                     className="VendorInfo"
                     value={distributorId}
                     onChange={(e) => {
-                      setDistributorId(e.target.value);
+                      const selectedId = e.target.value;
+                      console.log("Selected distributor ID:", selectedId);
+                      setDistributorId(selectedId);
                     }}
                   >
-                    {distributors.map((d, i) => (
-                      <option key={i} value={i}>
-                        {d.name}
-                      </option>
-                    ))}
+                    <option value="">Select a distributor</option>
+                    {distributors &&
+                      distributors.map((d, i) => (
+                        <option key={i} value={i}>
+                          {d.name}
+                        </option>
+                      ))}
                   </select>
                 </label>
               </div>
@@ -549,6 +582,7 @@ const App = (props) => {
   useEffect(() => {
     getDistributors();
   }, []);
+  console.log("distributors", distributors);
   return (
     <div>
       <Invoice
