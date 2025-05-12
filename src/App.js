@@ -43,7 +43,7 @@ const App = () => {
 
     if (accounts.length !== 0) {
       const account = accounts[0];
-
+      console.log(accounts);
       console.log("Found an authorized account:", account);
       setWallet("Connected");
 
@@ -75,7 +75,7 @@ const App = () => {
       const accounts = await ethereum.request({
         method: "eth_requestAccounts",
       });
-
+      console.log("accounts", accounts);
       console.log("Connected", accounts[0]);
 
       setWallet("Connected");

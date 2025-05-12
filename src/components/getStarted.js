@@ -27,9 +27,8 @@ const Greetings = () => {
 const GetStarted = ({ contract, account }) => {
   console.log("Contract:", contract);
   console.log("Account:", account);
-  console.log("Expected Wallet:", process.env.REACT_APP_WALLET_ADD);
 
-  const [show, setShow] = useState(false);
+  const [show, setShow] = useState(true);
   const { pathname } = useLocation();
 
   const checkAccount = () => {
@@ -39,16 +38,16 @@ const GetStarted = ({ contract, account }) => {
       return;
     }
 
-    if (!process.env.REACT_APP_WALLET_ADD) {
-      console.log("No manufacturer wallet address configured in .env");
-      setShow(false);
-      return;
-    }
+    //   if (!process.env.REACT_APP_WALLET_ADD) {
+    //     console.log("No manufacturer wallet address configured in .env");
+    //     setShow(false);
+    //     return;
+    //   }
 
-    const isManufacturer =
-      account.toLowerCase() === process.env.REACT_APP_WALLET_ADD.toLowerCase();
-    console.log("Is manufacturer:", isManufacturer);
-    setShow(isManufacturer);
+    //   const isManufacturer =
+    //     account.toLowerCase() === process.env.REACT_APP_WALLET_ADD.toLowerCase();
+    //   console.log("Is manufacturer:", isManufacturer);
+    //   setShow(isManufacturer);
   };
 
   useEffect(() => {
