@@ -1,6 +1,7 @@
 import React, { useState, useRef } from "react";
 import jsQR from "jsqr";
 import { ethers } from "ethers";
+import axios from "axios";
 import "../css/Authenticate.css";
 
 const Authenticate = ({ account, contract }) => {
@@ -10,6 +11,7 @@ const Authenticate = ({ account, contract }) => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [previewUrl, setPreviewUrl] = useState("");
   const [scanResult, setScanResult] = useState(null);
+  const [product, setProduct] = useState(null);
   const canvasRef = useRef(null);
 
   const handleFileSelect = async (event) => {
@@ -21,6 +23,7 @@ const Authenticate = ({ account, contract }) => {
       setError("");
       setMessage("");
       setScanResult(null);
+      setProduct(null);
 
       const img = new Image();
       img.src = url;
@@ -81,6 +84,16 @@ const Authenticate = ({ account, contract }) => {
             if (tx.to.toLowerCase() === contract.address.toLowerCase()) {
               setMessage("Product is Authenticated ✅");
               setAuth(true);
+
+              // Get product details from database
+              try {
+                const response = await axios.get(
+                  `http://127.0.0.1:3002/api/products/${hash}`
+                );
+                setProduct(response.data);
+              } catch (err) {
+                console.error("Error fetching product details:", err);
+              }
             } else {
               setError("Transaction was not sent to the correct contract");
             }
@@ -164,6 +177,66 @@ const Authenticate = ({ account, contract }) => {
                 </div>
               ))}
             </div>
+          </div>
+        )}
+
+        {product && (
+          <div className="product-details">
+            <h3>Product Details</h3>
+            <div className="details-grid">
+              <div className="detail-item">
+                <span className="detail-label">Name:</span>
+                <span className="detail-value">{product.name}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Description:</span>
+                <span className="detail-value">{product.description}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Manufacturer:</span>
+                <span className="detail-value">{product.manufacturer}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Distributor ID:</span>
+                <span className="detail-value">{product.distributorId}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Cost:</span>
+                <span className="detail-value">₹{product.cost}</span>
+              </div>
+              <div className="detail-item">
+                <span className="detail-label">Quantity:</span>
+                <span className="detail-value">{product.quantity}</span>
+              </div>
+            </div>
+
+            {product.resales && product.resales.length > 0 && (
+              <div className="resale-history">
+                <h3>Resale History</h3>
+                <div className="resale-table">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Distributor</th>
+                        <th>Customer</th>
+                        <th>Price</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {product.resales.map((resale, index) => (
+                        <tr key={index}>
+                          <td>{resale.distributorName}</td>
+                          <td>{resale.customerName}</td>
+                          <td>₹{resale.price}</td>
+                          <td>{new Date(resale.date).toLocaleDateString()}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            )}
           </div>
         )}
       </div>
