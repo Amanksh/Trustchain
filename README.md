@@ -20,9 +20,6 @@ Simply by proceeding to the authentication page where the *Distributor* or *Cons
 # But why Blockchain?
 After going through multiple methodologies and techniques used in the market to ensure authenticity of a product . We came up with a decentralized solution to authenticate the products whether they are real or fake.One of the reasons behind opting for a decentralized system is that it is immutable, so there are no chances of tampering the data and they are public, so there is nothing like secrecy. As it will provide complete transparency to the users, manufactures,vendors and others.
 
-### Demo Video
-https://www.loom.com/share/12e29a7cd8264662b218602e7e28c235
-
 ### Screenshots
 
 #### Home Page
@@ -44,9 +41,6 @@ https://www.loom.com/share/12e29a7cd8264662b218602e7e28c235
 #### Authentication Page
 <img width="1420" alt="Screenshot 2022-05-01 at 11 56 16 PM" src="https://user-images.githubusercontent.com/61861303/166159400-272a5cbe-4d7d-4a3e-93df-1997846d47a1.png">
 
-
-### Backend Code
-https://github.com/rohit-raje-786/Fake-prodcut-identification-smart-contract
 
 # Getting Started with Create React App
 
@@ -89,33 +83,6 @@ Instead, it will copy all the configuration files and the transitive dependencie
 
 You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
 
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
