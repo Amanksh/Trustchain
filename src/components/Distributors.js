@@ -11,18 +11,56 @@ function Distributors({ contract, account }) {
 
   const getDistributor = async () => {
     try {
-      const di = await contract.getAlldistributors();
-      console.log(di);
+      // Get all assets first
+      const allAssets = await contract.getAllAssets();
+      console.log("All assets:", allAssets);
 
-      setDistributors(di);
+      // Get all distributors
+      const allDistributors = await contract.getAlldistributors();
+      console.log("All distributors:", allDistributors);
+
+      // Create a Set to store unique distributor IDs associated with the account's assets
+      const relevantDistributorIds = new Set();
+
+      // Check each asset to see if it's owned by the current account
+      for (let i = 0; i < allAssets.length; i++) {
+        const isOwner = await contract.isOwnerOf(account, i);
+        console.log(`Asset ${i} is owned by ${account}:`, isOwner);
+
+        if (isOwner) {
+          // The distributorId is the last element in the asset array (index 10)
+          const distributorId = allAssets[i][10].toString();
+          console.log(`Adding distributor ID ${distributorId} for asset ${i}`);
+          relevantDistributorIds.add(distributorId);
+        }
+      }
+
+      console.log(
+        "Relevant distributor IDs:",
+        Array.from(relevantDistributorIds)
+      );
+
+      // Filter distributors to only include those in our set
+      const filteredDistributors = allDistributors.filter(
+        (distributor, index) => {
+          const isRelevant = relevantDistributorIds.has(index.toString());
+          console.log(`Distributor ${index} is relevant:`, isRelevant);
+          return isRelevant;
+        }
+      );
+
+      console.log("Filtered distributors:", filteredDistributors);
+      setDistributors(filteredDistributors);
     } catch (e) {
-      console.log(e);
+      console.log("Error in getDistributor:", e);
     }
   };
 
   useEffect(() => {
-    getDistributor();
-  }, []);
+    if (contract && account) {
+      getDistributor();
+    }
+  }, [contract, account]); // Re-run when contract or account changes
 
   return (
     distributors && (

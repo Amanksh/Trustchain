@@ -56,7 +56,7 @@ const App = () => {
         AssetTracker.abi,
         signer
       );
-      console.log("contract", contract);
+
       setContract(contract);
     } else {
       console.log("No authorized account found");
@@ -132,6 +132,15 @@ const App = () => {
                   path="available-distributors"
                   element={
                     <Distributors
+                      contract={contract}
+                      account={currentAccount}
+                    />
+                  }
+                />
+                <Route
+                  path="distributorform"
+                  element={
+                    <DistributorForm
                       contract={contract}
                       account={currentAccount}
                     />

@@ -10,16 +10,28 @@ function TrackProducts({ contract, account }) {
 
   const getAssets = async () => {
     try {
-      let a = await contract.getAllAssets();
-      setAssets(a);
+      let allAssets = await contract.getAllAssets();
+      // Filter assets to only show those owned by the current account
+      const ownedAssets = [];
+      for (let i = 0; i < allAssets.length; i++) {
+        const isOwner = await contract.isOwnerOf(account, i);
+        if (isOwner) {
+          ownedAssets.push(allAssets[i]);
+        }
+      }
+      console.log("owned assets", ownedAssets);
+      setAssets(ownedAssets);
     } catch (e) {
       console.log(e);
     }
   };
 
   useEffect(() => {
-    getAssets();
-  }, []);
+    if (contract && account) {
+      getAssets();
+    }
+  }, [contract, account]); // Re-run when contract or account changes
+
   return (
     <MainBar pageTitle="Track Products">
       <br />
