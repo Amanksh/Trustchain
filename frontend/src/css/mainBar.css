@@ -1,5 +1,5 @@
 #box-container {
-  margin: 0px;
+  margin: auto;
   width: 75%;
   height: 93vh;
   background-color: var(--light-bg);

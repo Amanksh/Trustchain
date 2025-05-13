@@ -26,7 +26,7 @@ const Navbar = ({ account }) => {
           to="/vendor"
           className={`nav-link ${isActive("/vendor") ? "active" : ""}`}
         >
-          Vendor
+          Manufacturer
         </Link>
         <Link
           to="/reseller"
@@ -39,7 +39,7 @@ const Navbar = ({ account }) => {
           to="/authenticate"
           className={`nav-link ${isActive("/authenticate") ? "active" : ""}`}
         >
-          Authenticate
+          Customer
         </Link>
       </div>
 

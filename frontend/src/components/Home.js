@@ -26,17 +26,17 @@ const Home = ({ account }) => {
                   alt="manufacturer"
                   className="options-image"
                 />
-                <h1 className="options-image-caption">Manufacturer Login</h1>
+                <h1 className="options-image-caption">Manufacturer</h1>
               </div>
             </NavLink>
-            <NavLink to="/distributorform" className="select-link">
+            <NavLink to="/reseller" className="select-link">
               <div className="options">
                 <img
                   src="/assets/images/distributor.png"
                   alt="manufacturer"
                   className="options-image"
                 />
-                <h1 className="options-image-caption">Distributor Login</h1>
+                <h1 className="options-image-caption">Reseller</h1>
               </div>
             </NavLink>
             <NavLink to="/authenticate" className="select-link">
